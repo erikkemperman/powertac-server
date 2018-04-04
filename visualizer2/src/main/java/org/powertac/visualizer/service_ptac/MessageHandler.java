@@ -171,6 +171,10 @@ public class MessageHandler {
     public synchronized void handleMessage(CustomerBootstrapData cbd) {
         Customer customer = customerRepo.findByName(cbd.getCustomerName());
         customer.setBootstrapNetUsage(Arrays.stream(cbd.getNetUsage()).boxed().collect(Collectors.toList()));
+
+        // Add bootstrap subscriptions to the default broker
+        Broker defaultBroker = brokerRepo.findByName("default broker");
+        defaultBroker.getRetail().signup(customer.getPopulation());
     }
 
     /**
